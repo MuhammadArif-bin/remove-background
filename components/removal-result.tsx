@@ -23,19 +23,19 @@ export default function RemovalResult({
     const processImageWithAI = async () => {
       try {
         const { removeBackground } = await import('@imgly/background-removal');
-        
+
         // Remove background using accurate AI model
         const imageBlob = await removeBackground(fileBlob || originalImage, {
           progress: (key, current, total) => {
             console.log(`Downloading model ${key}: ${current} / ${total}`);
           }
         });
-        
+
         // Create an object URL from the returned blob
         const url = URL.createObjectURL(imageBlob);
         setProcessedImage(url);
         setIsProcessing(false);
-        
+
       } catch (error) {
         console.error('Error removing background:', error);
         setProcessedImage(originalImage); // fallback to original
@@ -44,14 +44,14 @@ export default function RemovalResult({
         alert("Failed to remove background. Ensure you are connected to the internet.");
       }
     };
-    
+
     processImageWithAI();
 
   }, [originalImage, fileBlob]);
 
   const handleDownload = () => {
     if (!processedImage) return;
-    
+
     const link = document.createElement('a');
     link.href = processedImage;
     link.download = `${fileName.split('.')[0]}-no-bg.png`;
